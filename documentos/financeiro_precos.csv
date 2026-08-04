@@ -1,0 +1,6 @@
+ID,Tipo_Embarcacao,Material_Principal,Preco_Base_Beries,Prazo_Entrega_Semanas
+001,Escuna de Pesca,Pinho Padrao,15000000,4
+002,Caravela Mercante,Carvalho,55000000,12
+003,Galeao de Batalha (Marinha),Aco e Mogno,300000000,24
+004,Navio Customizado (Classe Especial),Madeira Adam,1000000000,48
+005,Bote Salva-vidas,Madeira Comum,500000,1
