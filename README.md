@@ -2,23 +2,34 @@
 
 Este projeto é uma solução de Inteligência Artificial Generativa desenvolvida para o Challenge Oracle + Alura (ONE AI For Tech). O Den Den Mushi AI atua como um assistente corporativo inteligente, projetado para auxiliar os carpinteiros e engenheiros navais da Galley-La Company (Water 7) na consulta de manuais técnicos, políticas de RH e tabelas de preços.
 
+🌐 Aplicação Online (Deploy)
+
+Acesse a aplicação em tempo real:
+👉 Den Den Mushi AI — Streamlit Community Cloud
+
 📝 Descrição do Projeto
 
-O Den Den Mushi AI é um sistema de RAG (Retrieval-Augmented Generation). Diferente de um chatbot comum que tenta adivinhar respostas, este assistente recupera informações precisas de documentos internos da empresa antes de gerar uma resposta. O objetivo é reduzir o tempo gasto na busca por manuais impressos, otimizando a operação logística e de segurança nas Docas.
+O Den Den Mushi AI é um sistema de RAG (Retrieval-Augmented Generation). Diferente de um chatbot comum que tenta adivinhar respostas, este assistente recupera informações precisas de documentos internos da empresa antes de gerar uma resposta. O objetivo é reduzir o tempo gasto na busca por manuais impressos, otimizando a operação logística e de segurança nas Docas de Water 7.
 
-🏗️ Arquitetura
+🏛️ Arquitetura da Solução
 
-O sistema segue um pipeline de dados estruturado para garantir respostas contextuais:
+O sistema segue um pipeline de dados estruturado para garantir respostas contextuais e seguras:
 
-Ingestão: Carregamento de documentos em variados formatos (PDF, DOCX, CSV) usando LangChain.
+[Documentos: PDF/DOCX/CSV] ──> [LangChain Text Splitter] ──> [Google Gemini Embeddings]
+                                                                      │
+                                                                      ▼
+[Interface Streamlit] <── [LLM Gemini 1.5 Flash] <── [Contexto] <── [ChromaDB VectorStore]
 
-Processamento (Chunking): Os textos são fragmentados em pedaços menores (chunks) de 1000 caracteres para melhor processamento.
 
-Embeddings: Conversão dos textos em vetores numéricos semânticos utilizando o modelo gemini-embedding-001.
+Ingestão: Carregamento de documentos em variados formatos (PDF, DOCX, CSV) localizados na pasta documentos utilizando loaders do LangChain.
 
-Vector Store (ChromaDB): Armazenamento local desses vetores para permitir buscas rápidas baseadas em similaridade.
+Processamento (Chunking): Os textos são fragmentados em pedaços menores (chunks) de 1000 caracteres com sobreposição de 200 caracteres para preservar o contexto.
 
-Geração (LLM): O modelo gemini-1.5-flash consome os dados recuperados e formula uma resposta em linguagem natural, mantendo o contexto corporativo.
+Embeddings: Conversão dos fragmentos de texto em vetores numéricos semânticos utilizando o modelo models/gemini-embedding-001 do Google.
+
+Vector Store (ChromaDB): Armazenamento e indexação local desses vetores para permitir buscas rápidas baseadas em similaridade vetorial.
+
+Geração (LLM): O modelo gemini-1.5-flash consome o prompt estruturado juntamente com os trechos recuperados para formular uma resposta precisa em linguagem natural.
 
 🛠️ Tecnologias Utilizadas
 
@@ -26,34 +37,60 @@ Linguagem: Python 3.10+
 
 Framework de IA: LangChain
 
-LLM: Google Gemini 1.5 Flash
+LLM & Embeddings: Google Gemini (gemini-1.5-flash & gemini-embedding-001)
 
 Banco Vetorial: ChromaDB
 
-Interface: Streamlit
+Interface Gráfica: Streamlit
 
-Ambiente de Execução: Local (com suporte a OCI - Oracle Cloud Infrastructure)
+Hospedagem / Cloud: Streamlit Community Cloud
 
-🚀 Instruções de Instalação
+📸 Demonstração da Aplicação
+
+Interface do Assistente
+
+Exemplo de Resposta do Agente
+
+💬 Exemplos de Perguntas e Respostas
+
+📋 Exemplo 1: Recursos Humanos e Segurança
+
+Pergunta: "O que devemos fazer se a Aqua Laguna nível 3 for anunciada?"
+
+Resposta do Agente: "Quando o alarme de nível 3 soar, todos os carpinteiros devem evacuar a Doca 1 imediatamente. Ferramentas pesadas devem ser presas ao solo ou levadas para o andar superior. Os dias de chuva da Aqua Laguna são considerados Folga Remunerada para todos os funcionários."
+
+🪵 Exemplo 2: Engenharia Naval
+
+Pergunta: "Como devo proceder para cortar a Madeira Adam?"
+
+Resposta do Agente: "O corte da Madeira Adam deve ser feito utilizando serras de liga de aço temperado resfriadas a água, pois serras comuns quebram imediatamente devido à densidade extrema da madeira. Acesso restrito aos principais contramestres."
+
+💰 Exemplo 3: Tabela de Preços (Financeiro)
+
+Pergunta: "Qual é a embarcação mais barata e qual seu prazo de entrega?"
+
+Resposta do Agente: "A embarcação mais barata na nossa tabela de preços é o Bote Salva-vidas, custando 500.000 Beries, com prazo de entrega de 1 semana."
+
+🚀 Instruções de Execução Local
 
 Pré-requisitos
 
 Python 3.10 ou superior instalado.
 
-Uma API Key do Google AI Studio.
+Uma API Key válida gerada no Google AI Studio.
 
 Passo a Passo
 
 Clone o repositório:
 
-git clone https://github.com/seu-usuario/den-den-mushi-ai.git
-cd den-den-mushi-ai
+git clone https://github.com/wagnercampos5/galey-la-ai-agent-antigravity.git
+cd galey-la-ai-agent-antigravity
 
 
-Crie um ambiente virtual:
+Crie e ative um ambiente virtual:
 
 python -m venv venv
-# No Windows:
+# No Windows (PowerShell):
 .\venv\Scripts\Activate.ps1
 # No Linux/Mac:
 source venv/bin/activate
@@ -64,8 +101,8 @@ Instale as dependências:
 pip install -r requirements.txt
 
 
-Configure o ambiente:
-Crie um arquivo .env na raiz do projeto e adicione sua chave:
+Configure o arquivo de ambiente:
+Crie um arquivo .env na raiz do projeto e insira sua chave:
 
 GEMINI_API_KEY=sua_chave_aqui
 
@@ -75,12 +112,4 @@ Execute a aplicação:
 streamlit run app.py
 
 
-💬 Exemplos de Perguntas e Respostas
-
-Pergunta: "O que devemos fazer se a Aqua Laguna nível 3 for anunciada?"
-Resposta: "Quando o alarme de nível 3 soar, todos os carpinteiros devem evacuar a Doca 1 imediatamente. Ferramentas pesadas devem ser presas ao solo ou levadas para o andar superior."
-
-Pergunta: "Qual é o custo de um Galeão de Batalha da Marinha?"
-Resposta: "Com base na nossa tabela de preços atualizada, o Galeão de Batalha (Marinha) tem um preço base de 300.000.000 Beries."
-
-Desenvolvido por Wagner | Challenge Oracle + Alura
+Desenvolvido por Wagner Campos — Challenge Oracle + Alura (ONE AI For Tech).
